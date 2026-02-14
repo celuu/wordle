@@ -31,7 +31,7 @@ export const Board = () => {
 
   }, [])
 
-
+      console.log(chosenWord, "chosen");
 
  useEffect(() => {
    const onKeyDown = (event) => {
@@ -50,11 +50,6 @@ export const Board = () => {
           return;
         }
 
- 
-
-
-
-
      const isLetter = /^[a-zA-Z]$/.test(event.key);
 
      if (!isLetter || activeCol >= COLS) return;
@@ -67,10 +62,6 @@ export const Board = () => {
      setActiveCol((col) => col + 1);
    };
 
-   const backspace = (event) => {
-
-   }
-
 
    window.addEventListener("keydown", onKeyDown);
 
@@ -79,21 +70,21 @@ export const Board = () => {
    };
  }, [activeRow, activeCol]);
 
+ const showColor = (letter, index) => {
+  if (!chosenWord) return "white";
+  letter = letter.toLowerCase();
+  if(letter === chosenWord[index]) {
+    return "green";
+   }
+   if (chosenWord.includes(letter)) {
+     return "yellow";
+   }
+    return "gray";
+ }
+
   const checkAnswer = () => {
-    let submittedWord = board[activeRow].map((letter) => letter.toLowerCase())
     let copy = submittedBoard.map(row => [...row])
-    let actualWord = chosenWord.split("");
-    for(let i = 0; i < COLS; i++) {
-      let current = submittedWord[i];
-      let actual = actualWord[i];
-      if (current === actual) {
-        copy[activeRow][i] = "green"
-      } else if(actualWord.includes(current)) {
-        copy[activeRow][i] = "yellow"
-      } else {
-        copy[activeRow][i] = "gray"
-      }
-    }
+
     setSubmittedBoard(copy)
     setActiveRow((row) => row + 1)
     setActiveCol(0)
@@ -126,7 +117,7 @@ export const Board = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     margin: "0",
-                    backgroundColor: submittedBoard[r][c],
+                    backgroundColor: activeRow > r ? showColor(board[r][c], c) : "white" ,
                   }}
                   key={c}
                 >

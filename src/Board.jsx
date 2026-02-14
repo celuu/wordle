@@ -21,10 +21,6 @@ export const Board = () => {
   const [submittedBoard, setSubmittedBoard] = useState(() => createStartingBoard())
   const [activeRow, setActiveRow] = useState(0);
   const [activeCol, setActiveCol] = useState(0);
-
-
-  // console.log(randomNumber)
-  // console.log(board)
   const [chosenWord, setChosenWord] = useState()
 
   useEffect(() => {
@@ -39,6 +35,26 @@ export const Board = () => {
 
  useEffect(() => {
    const onKeyDown = (event) => {
+
+        if (event.key === "Backspace") {
+        if (activeCol === 0) return;
+          const newCol = activeCol - 1;
+
+          setBoard((prev) => {
+            const copy = prev.map((row) => [...row]);
+            copy[activeRow][newCol] = "_";
+            return copy;
+          });
+
+          setActiveCol(newCol);
+          return;
+        }
+
+ 
+
+
+
+
      const isLetter = /^[a-zA-Z]$/.test(event.key);
 
      if (!isLetter || activeCol >= COLS) return;
@@ -52,8 +68,6 @@ export const Board = () => {
    };
 
    const backspace = (event) => {
-
- 
 
    }
 
@@ -86,7 +100,7 @@ export const Board = () => {
   }
     return (
       <div>
-        <h1>Board</h1>
+        <h1>Wordle</h1>
         <p>Word: {chosenWord}</p>
         <div>
           {board.map((row, r) => (
@@ -94,7 +108,7 @@ export const Board = () => {
               style={{
                 display: "flex",
                 flexDirection: "row",
-                border: "1px solid black",
+                marginBottom: "20px",
                 height: "100px",
                 width: "500px",
               }}
@@ -106,8 +120,12 @@ export const Board = () => {
                     display: "flex",
                     flexDirection: "row",
                     border: "1px solid black",
+                    borderRadius: "10px",
                     height: "100px",
                     width: "100px",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0",
                     backgroundColor: submittedBoard[r][c],
                   }}
                   key={c}
